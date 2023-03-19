@@ -1,23 +1,27 @@
 <?php
 session_start();
 require_once './data/database.php';
+
 if (isset($_POST['submit'])) {
     $username = $_POST['email'];
     $password = $_POST['pass'];
     $sql = "SELECT * from khachhang where mail ='$username' and matKhau='$password'";
     $query = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($query);
-    $_SESSION["CustomerId"] = $row["maKH"];
     if ($username == 'admin@gmail.com' && $password == '1111') {
+        $msg = "Các bạn đã đăng nhập thành công";
         header('Location: ../Backend/home.php');
-
         die();
     } else if (mysqli_num_rows($query)) {
-        $logined=1;
+        $_SESSION['user'] = $row["tenKH"];
+        $_SESSION['mail'] = $row['mail'];
+        $_SESSION["maKH"] = $row["maKH"];
+        $_SESSION['pass'] = $password;
+        $msg = "Các bạn đã đăng nhập thành công";
         header('Location: ../Page/Home.php');
-        $_SESSION["user"] = $row['tenKH'];
         //  header("Location: ../font_end/index.php?name=<?php echo $query['tentk']; 
     } else {
+        
         echo '<script>alert("Email hoặc mật khẩu sai !")</script>';
     }
 }
@@ -45,11 +49,11 @@ if (isset($_POST['submit'])) {
             margin: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             background-color: #080710;
         }
-        
+
         .background {
             width: 430px;
             height: 520px;
@@ -58,25 +62,26 @@ if (isset($_POST['submit'])) {
             left: 50%;
             top: 50%;
         }
-        
+
         .background .shape {
             height: 200px;
             width: 200px;
             position: absolute;
             border-radius: 50%;
         }
-        
+
         .shape:first-child {
-            background: linear-gradient( #1845ad, #23a2f6);
+            background: linear-gradient(#1845ad, #23a2f6);
             left: -80px;
             top: -80px;
         }
-        
+
         .shape:last-child {
-            background: linear-gradient( to right, #ff512f, #f09819);
+            background: linear-gradient(to right, #ff512f, #f09819);
             right: -30px;
             bottom: -80px;
         }
+
         form {
             height: 520px;
             width: 400px;
@@ -91,7 +96,7 @@ if (isset($_POST['submit'])) {
             box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
             padding: 50px 35px;
         }
-        
+
         form * {
             font-family: 'Poppins', sans-serif;
             color: #ffffff;
@@ -99,21 +104,21 @@ if (isset($_POST['submit'])) {
             outline: none;
             border: none;
         }
-        
+
         form h3 {
             font-size: 32px;
             font-weight: 500;
             line-height: 42px;
             text-align: center;
         }
-        
+
         label {
             display: block;
             margin-top: 30px;
             font-size: 16px;
             font-weight: 500;
         }
-        
+
         input {
             display: block;
             height: 50px;
@@ -125,10 +130,11 @@ if (isset($_POST['submit'])) {
             font-size: 14px;
             font-weight: 300;
         }
-        
+
         ::placeholder {
             color: #e5e5e5;
         }
+
         .button {
             margin-top: 50px;
             width: 100%;

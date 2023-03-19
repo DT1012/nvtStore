@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+require_once 'data/database.php';
+if (isset($_GET['trang'])) {
+    $page = $_GET['trang'];
+} else {
+    $page = "";
+}
+if ($page == "" || $page == 1) {
+    $begin = 0;
+} else {
+    $begin = ($page * 3) - 3;
+}
+$sql = "SELECT * FROM sanpham order by sanpham.maSP desc limit $begin,3";
+$query = mysqli_query($conn, $sql);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -167,6 +185,7 @@
 
         .product-row {
             position: relative;
+            padding: 20px;
             margin: 10px 30px 50px;
             border: 1px solid #181515;
             text-align: center;
@@ -189,6 +208,26 @@
         .product-introduce:hover {
             color: #e61d1d;
         }
+
+        .product-menu {
+            font-size: 1.8rem;
+            text-decoration: none;
+            margin-left: 10%;
+        }
+
+        .product-list {
+            display: inline;
+            list-style-type: none;
+        }
+
+        .product-list>li {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px;
+            background-color: #b8c6db;
+            display: inline-block;
+        }
+
 
         footer {
             margin-top: 50px;
@@ -251,12 +290,7 @@
         }
     </style>
 </head>
-<?php
-require_once 'data/database.php';
-$sql = "SELECT * FROM sanpham inner join theloai on sanpham.maTL = theloai.maTL";
-$sql = "SELECT * FROM sanpham inner join nhasanxuat on sanpham.maNSX = nhasanxuat.maNSX";
-$query = mysqli_query($conn, $sql);
-?>
+
 
 <body>
     <?php
@@ -265,6 +299,26 @@ $query = mysqli_query($conn, $sql);
     <?php
     require_once 'layout/main-product.php';
     ?>
+    <div class="product-menu">
+        <p>Trang : </p>
+        <?php
+        $sql_trang =  mysqli_query($conn, "SELECT * from sanpham");
+        $row_count = mysqli_num_rows($sql_trang);
+        $trang =  ceil($row_count / 3);
+        ?>
+        <ul class="product-list">
+            <?php
+            for ($i = 1; $i <= $trang; $i++) {
+            ?>
+                <li><a <?php if ($i == $page) {
+                            echo 'style ="text-decoration:underline;"';
+                        } else {
+                            echo "";
+                        } ?> href="http://localhost/nvtStore/Page/CuaHang.php?trang=<?php echo $i ?>"><?php echo $i ?></a></li>
+            <?php } ?>
+
+        </ul>
+    </div>
 
     <?php
     require_once 'layout/footer.php';

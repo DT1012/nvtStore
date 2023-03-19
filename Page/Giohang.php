@@ -11,33 +11,33 @@ if (isset($_GET['delid']) && ($_GET['delid'] >= 0)) {
     array_splice($_SESSION['giohang'], $_GET['delid'], 1);
 }
 if (isset($_POST['addcart']) && ($_POST['addcart'])) {
-    $hinh = $_POST['image'];
-    $tensp = $_POST['tenSP'];
-    $gia = $_POST['gia'];
-    $soluong = $_POST['soLuong'];
+    $image = $_POST['image'];
+    $tenSP = $_POST['tenSP'];
+    $donGia = $_POST['gia'];
+    $soLuong = $_POST['soLuong'];
     //kiem tra sp co trong gio hang hay khong?
 
     $fl = 0; //kiem tra sp co trung trong gio hang khong?
 
     for ($i = 0; $i < sizeof($_SESSION['giohang']); $i++) {
 
-        if ($_SESSION['giohang'][$i][1] == $tensp) {
+        if ($_SESSION['giohang'][$i][1] == $tenSP) {
             $fl = 1;
-            $soluongnew = $soluong + $_SESSION['giohang'][$i][3];
-            $_SESSION['giohang'][$i][3] = $soluongnew;
+            $soLuongnew = $soLuong + $_SESSION['giohang'][$i][3];
+            $_SESSION['giohang'][$i][3] = $soLuongnew;
             break;
         }
     }
     //neu khong trung sp trong gio hang thi them moi
     if ($fl == 0) {
         //them moi sp vao gio hang
-        $sp = [$hinh, $tensp, $gia, $soluong];
+        $sp = [$image, $tenSP, $donGia, $soLuong];
         $_SESSION['giohang'][] = $sp;
     }
 
     // var_dump($_SESSION['giohang']);
 }
-    include '../QLDonHang/donhang/thuvien.php';
+    include '../Page/thuvien.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -243,7 +243,7 @@ if (isset($_POST['addcart']) && ($_POST['addcart'])) {
     ?>
     <div class="main">
         <div class="box">
-            <form action="../QLDonHang/donhang/dathang.php" method="post">
+            <form action="../Page/dathang.php" method="post">
                 <div class="row">
                     <h2>THÔNG TIN NHẬN HÀNG</h2>
                     <table class="thongtinnhanhang">
@@ -277,7 +277,7 @@ if (isset($_POST['addcart']) && ($_POST['addcart'])) {
                             <th>Thành tiền ($)</th>
                             <th>Xóa</th>
                         </tr>
-                        <?php showgiohang(); ?>
+                        <?php echo showgiohang(); ?>
                         <!-- <tr>
                             <td>1</td>
                             <td><img src="images/1.jpg" alt=""></td>

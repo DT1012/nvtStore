@@ -18,9 +18,7 @@
                 case 'danhsach':
                     require_once 'donhang/danhsach.php';
                     break;
-                case 'chitiet':
-                    require_once 'donhang/chitiet.php';
-                    break;
+                
                 
                 default:
                     require_once 'donhang/danhsach.php';

@@ -11,7 +11,7 @@
                 <li class="item"><a href="../QLNhaSX/index.php">Nhà Sản Xuất</a></li>
                 <li class="item"><a href="../QLTheLoai/index.php">Thể Loại</a></li>
                 <li class="item"><a href="../QLDonHang/index.php">Đơn Hàng</a></li>
-                <li class="item"><a href="../Page/Home.php">Trang Chủ</a></li>
+                <li class="item"><a href="../Page/Home.php" >Trang Chủ</a></li>
             </ul>
         </div>
     </div>

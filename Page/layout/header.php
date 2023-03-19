@@ -14,18 +14,28 @@
             </ul>
         </div>
         <div class="header-user">
-            
-                <a href="http://localhost/nvtStore/Page/DangNhap.php"><span class="user">
-                        <p>Đăng Nhập<i class="ti-user icon-user padding"></i></p>
-                    </span></a>
+            <?php 
+                if(!isset($_SESSION['user']) ) { ?>
+                    <a href="http://localhost/nvtStore/Page/DangNhap.php"><span class="user">
+                    Đăng nhập
+                </span></a><?php
+                } else { ?>
+                   <p><?php echo  $_SESSION['user'] ." Đang nhập thành công!";
+                    ?></p>
+                    <a href="http://localhost/nvtStore/Page/DangNhap.php"><span class="user">
+                        Đăng xuất
+                    </span></a> 
+               <?php } ?>
+                    
+
         </div>
     </div>
     <div class="header-inner">
         <img src="../image/logo-nha-xinh-moi-200422.png" width="169px" alt="Logo" class="logo">
-        <div class="header-search">
+        <form class="header-search" method="Get" action="Home.php">
             <label for="search">
-                <input type="text" id="search" name="search" placeholder="Tìm sản phẩm?.."><i class="ti-search icon-search"></i>
+                <input type="text" id="search" name="search" placeholder="Tìm sản phẩm?..."><i class="ti-search icon-search"></i>
             </label>
-        </div>
+        </form>
     </div>
 </header>

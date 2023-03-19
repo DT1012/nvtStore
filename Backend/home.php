@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 function getTotal($propName, $tableName, $key)
 {
     $servername = "localhost";
@@ -151,9 +153,34 @@ function getTotal($propName, $tableName, $key)
                 echo  getTotal("soLuongSP", "sanpham", "sum");
                 ?>
             </div>
-            <a class="product-titel" href="../QLSanPham/index.php">Sản Phẩm</a>
+            <a class="product-titel" href="../QLSanPham/index.php">Số lượng Sản Phẩm</a>
         </div>
+        <div class="main-product">
+            <div class="product-img">
 
+                <img src="../image/luottruycap.png" alt="Anh" class="img">
+
+            </div>
+            <div class="product-number">
+                <?php
+                if (isset($_SESSION['luottruycap'])) echo  $_SESSION['luottruycap'];
+                ?>
+            </div>
+            <p class="product-titel">Lượt truy cập</p>
+        </div>
+        <div class="main-product">
+            <div class="product-img">
+
+                <img src="../image/luottruycap.png" alt="Anh" class="img">
+
+            </div>
+            <div class="product-number">
+                <?php
+                if (isset($_SESSION['mail'])) echo  $_SESSION['mail'] ;
+                ?>
+            </div>
+            <p class="product-titel">Đang truy cập</p>
+        </div>
         <div class="main-product">
             <div class="product-img">
                 <a href="../QLKhachHang/index.php">

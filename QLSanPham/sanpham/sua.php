@@ -20,17 +20,17 @@
         }else{
             $image = $_FILES['image']['name'];
             $image_tmp = $_FILES['image']['name'];
-            move_uploaded_file($image_tmp, 'image/'.$image);
+            move_uploaded_file($image_tmp, '../image/'.$image);
         }
-
+        
         $gia = $_POST['gia'];
         $ngay = $_POST['ngay'];
         $moTa = $_POST['moTa'];
         $soLuongSP = $_POST['soLuongSP'];
-
+        
         $maTL = $_POST['maTL'];
         $maNSX = $_POST['maNSX'];
-
+        
         $sql = "UPDATE sanpham SET tenSP = '$tenSP', image = '$image', gia = '$gia', ngay = '$ngay', moTa = '$moTa', soLuongSP = '$soLuongSP', maTL = '$maTL', maNSX = '$maNSX' where maSP = '$id'";
         $query = mysqli_query($conn, $sql);
         header('location: index.php?page_layout=danhsach');
@@ -82,7 +82,7 @@
                             while($row_TL = mysqli_fetch_assoc($query_TL)){?>
                                 <option value="<?php echo $row_TL['maTL']; ?>"><?php echo $row_TL['tenTL']; ?></option>
                             <?php } ?>
-                        ?>
+                    
                     </select>
                 </div>
 
@@ -93,7 +93,7 @@
                             while($row_NSX = mysqli_fetch_assoc($query_NSX)){?>
                                 <option value="<?php echo $row_NSX['maNSX']; ?>"><?php echo $row_NSX['tenNSX']; ?></option>
                             <?php } ?>
-                        ?>
+                        
                     </select>
                 </div>
 

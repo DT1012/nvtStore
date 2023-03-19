@@ -133,7 +133,7 @@
 <?php
 require_once 'data/database.php';
 
-$sql = "SELECT * FROM donhang inner join khachhang on donhang.maKH = khachhang.maKH inner join sanpham on donhang.maSP = sanpham.maSP";
+$sql = "SELECT * FROM donhang inner join hoadon where donhang.maHD = hoadon.maHD";
 $query = mysqli_query($conn, $sql);
 ?>
 
@@ -150,11 +150,11 @@ $query = mysqli_query($conn, $sql);
                         <th>Tên Sản Phẩm</th>
                         <th>Ảnh Sản Phẩm</th>
                         <th>Giá</th>
-                        <th>Ngày </th>
                         <th>Số Lượng</th>
                         <th>Người Đặt</th>
                         <th>Thành Giá</th>
-                        <th>Trạng Thái</th>
+                        <th col="2">Trạng Thái</th>
+                        
 
                     </tr>
                 </thead>
@@ -169,19 +169,19 @@ $query = mysqli_query($conn, $sql);
                             <td>
                                 <img style="width: 100px;" src="../image/<?php echo $row['image']; ?>" alt="">
                             </td>
-                            <td><?php echo number_format($row['gia'], 0, ' ', ',')  ?></td>
-                            <td><?php echo $row['ngay']; ?></td>
+                            <td><?php echo number_format($row['donGia'], 0, ' ', ',')  ?></td>
                             <td><?php echo $row['soLuong']; ?></td>
                             <td><?php echo $row['tenKH'] ?></td>
-                            <td><?php
-                                $thanhGia = $row['gia'] * $row['soLuong'];
-                                echo number_format($thanhGia, 0, ' ', ',');
-
-                                ?></td>
-                            <td><?php echo $row['trangThai'] ?></td>
-
+                            <td><?php echo   number_format($row['thanhTien'], 0, " ",","); ?></td>
+                            
                             <td>
-                                <a style="text-decoration: none; margin-right: 20px;" href="index.php?page_layout=chitiet&id=<?php echo $row['maSP']; ?>">Chi Tiết</a>
+                                <form action="">
+                                    <input type="radio" style="margin: 10px; padding: 16px;"  name="status"  value="Đang giao" checked>Đang giao
+                                    <input type="radio" name="status" style="margin: 10px;" value="Đã hoàn thành">Đã hoàn thành
+                                </form>
+                            </td>
+                            <td>
+                                <a style="text-decoration: none; margin-right: 20px;" href="index.php?page_layout=chitiet&id=<?php echo $row['maHD']; ?>">Cập nhật</a>
                             </td>
                         </tr>
                     <?php } ?>

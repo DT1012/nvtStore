@@ -1,3 +1,25 @@
+<?php
+session_start();
+require_once 'data/database.php';
+if (!isset($_SESSION['luottruycap'])) $_SESSION['luottruycap'] = 0;
+else $_SESSION['luottruycap'] += 1;
+if (!isset($_SESSION['mail']))  $_SESSION['mail'] = 0;
+elseif (isset($_SESSION['mail'])) $_SESSION['mail'] = 1;
+else  $_SESSION['mail'] += 1;
+if (isset($_GET['trang'])) {
+  $page = $_GET['trang'];
+} else {
+  $page = "";
+}
+if ($page == "" || $page == 1) {
+  $begin = 0;
+} else {
+  $begin = ($page * 4) - 4;
+}
+$sql = "SELECT * FROM sanpham order by sanpham.maSP desc limit $begin,4";
+$query = mysqli_query($conn, $sql);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -204,6 +226,7 @@
       border-radius: 10px;
       border: 1px solid black;
       padding: 15px;
+      overflow: hidden;
     }
 
     .product-img {
@@ -212,10 +235,57 @@
       transition-duration: .3s;
       transition-property: transform;
       transition-timing-function: ease-out;
+      object-fit: cover;
+    }
+
+    .main-menu {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+    }
+
+    input[type="submit"],
+    .main-menu>a {
+      cursor: pointer;
+      font-size: 20px;
+      margin: 20px;
+      padding: 10px;
+      border-radius: 20px;
+      display: inline-block;
+      background-color: red;
+      opacity: 0.7;
+      width: 200px;
+      line-height: 30px;
+      color: white;
+
+    }
+
+    input[type="submit"]:hover,
+    .main-menu>a:hover {
+      opacity: 0.4;
     }
 
     .product-img:hover {
-       transform: scale(1.13);
+      transform: scale(1.1);
+    }
+
+    .product-menu {
+      font-size: 1.8rem;
+      text-decoration: none;
+      margin-left: 10%;
+    }
+
+    .product-list {
+      display: inline;
+      list-style-type: none;
+    }
+
+    .product-list>li {
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px;
+      background-color: #b8c6db;
+      display: inline-block;
     }
 
     .intr,
@@ -285,12 +355,6 @@
     }
   </style>
 </head>
-<?php
-require_once 'data/database.php';
-$sql = "SELECT * FROM sanpham inner join theloai on sanpham.maTL = theloai.maTL";
-$sql = "SELECT * FROM sanpham inner join nhasanxuat on sanpham.maNSX = nhasanxuat.maNSX";
-$query = mysqli_query($conn, $sql);
-?>
 
 <body>
   <?php
@@ -324,26 +388,61 @@ $query = mysqli_query($conn, $sql);
   </div>
 
   <div class="main">
+    <div class="main-menu">
+      <a href="./Home.php">Hot</a>
+      <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?> ">
+        <input type="submit" value="0 -> 40,000,000đ " name="search-gia1">
+        <input type="submit" value=">= 40,000,000đ " name="search-gia2">
+      </form>
+    </div>
     <div class="product">
       <div class="product-colum">
         <?php
         if (isset($_GET['search'])) {
           $search = $_GET['search'];
-          $querySearch = "SELECT * from sanpham inner join theloai on sanpham.maTL = theloai.maTL inner join nhasanxuat on sanpham.maNSX = nhasanxuat.maNSX where '$search' is not null and tenSP like CONCAT ('%$search%') or '$search' is null  ";
+          $querySearch = "SELECT * from sanpham  where '$search' is not null and tenSP like CONCAT ('%$search%') or '$search' is null  ";
+          $dataSearch = mysqli_query($conn, $querySearch);
+        } else if(!isset($_GET['search'])){
+          $dataSearch = mysqli_query($conn, $sql);if (isset($_POST['search-gia2'])) {
+          $querySearch = "SELECT * from sanpham where sanpham.gia >= 40000000 ";
+          $dataSearch = mysqli_query($conn, $querySearch);
+        } else if (isset($_POST['search-gia1'])) {
+          $querySearch = "SELECT * from sanpham where sanpham.gia < 40000000 ";
           $dataSearch = mysqli_query($conn, $querySearch);
         } else {
           $dataSearch = mysqli_query($conn, $sql);
-        }
+        }}
+        
         while ($row = mysqli_fetch_assoc($dataSearch)) { ?>
           <div class="product-row">
             <a href="http://localhost/nvtStore/Page/Sanpham.php?id=<?php echo $row['maSP'] ?>">
               <img src="../image/<?php echo $row['image'] ?> " alt="Lỗi ảnh" class="product-img">
             </a>
             <p class="intr "><?php echo $row['tenSP'] ?></p>
-            <p class="pic"><?php echo $row['gia'] ?> ₫<button style="width: 40px; height: 30px; background-color: rgb(243, 73, 73); border: none; cursor: pointer; border-radius: 5px; margin-left: 5px;">Mua</button>
+            <p class="pic"><?php echo number_format($row['gia'], 0, '', ','); ?> ₫<button style="width: 90px; height: 30px; background-color: rgb(243, 73, 73); border: none; cursor: pointer; border-radius: 5px; margin-left: 5px;">Chi Tiết</button>
           </div>
           </p>
         <?php }  ?>
+      </div>
+      <div class="product-menu">
+        <p>Trang : </p>
+        <?php
+        $sql_trang =  mysqli_query($conn, "SELECT * from sanpham");
+        $row_count = mysqli_num_rows($sql_trang);
+        $trang =  ceil($row_count / 4);
+        ?>
+        <ul class="product-list">
+          <?php
+          for ($i = 1; $i <= $trang; $i++) {
+          ?>
+            <li><a <?php if ($i == $page) {
+                      echo 'style ="text-decoration:underline;"';
+                    } else {
+                      echo "";
+                    } ?> href="http://localhost/nvtStore/Page/Home.php?trang=<?php echo $i ?>"><?php echo $i ?></a></li>
+          <?php } ?>
+
+        </ul>
       </div>
     </div>
   </div>
